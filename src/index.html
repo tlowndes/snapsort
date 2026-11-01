@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self'">
+  <title>Snapsort</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="window" id="window">
+    <!-- Sidebar -->
+    <aside class="side">
+      <div class="app drag">
+        <div class="app-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"/><circle cx="12" cy="12" r="3"/></svg></div>
+        Snapsort
+      </div>
+      <nav class="nav" id="nav">
+        <button class="item" data-view="review">
+          <svg viewBox="0 0 24 24"><path d="M4 13l2-8h12l2 8M4 13v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5M4 13h5l1 2h4l1-2h5"/></svg>
+          To review<span class="n" id="count-review"></span>
+        </button>
+        <button class="item" data-view="recent">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
+          Recently filed<span class="n" id="count-recent"></span>
+        </button>
+        <div class="group">Folders</div>
+        <div id="folders"></div>
+      </nav>
+      <div class="side-foot">
+        <div class="status" id="status">
+          <span class="live" id="live"></span>
+          <div class="status-text"><b id="status-title">Watching</b><span id="status-sub"></span></div>
+          <button class="toggle" id="pause-toggle" role="switch" aria-label="Watch for new screenshots"></button>
+        </div>
+        <button class="item settings-btn" id="open-settings">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+          Settings<span class="n" id="update-dot"></span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <section class="main">
+      <header class="bar drag">
+        <h1 id="view-title">To review</h1><span class="sub" id="view-sub"></span>
+        <label class="search no-drag">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+          <input id="search" type="search" placeholder="Search text in screenshots" spellcheck="false">
+        </label>
+        <div class="seg no-drag" role="group" aria-label="View as">
+          <button data-layout="grid" class="on" aria-label="Grid"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></button>
+          <button data-layout="list" aria-label="List"><svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h14"/></svg></button>
+        </div>
+        <button class="btn primary no-drag" id="primary-action">File all</button>
+      </header>
+      <div class="banner" id="banner" hidden></div>
+      <div class="scroll" id="scroll">
+        <div class="tiles grid" id="tiles"></div>
+        <div class="empty" id="empty" hidden></div>
+      </div>
+    </section>
+
+    <!-- Inspector -->
+    <aside class="insp" id="insp">
+      <div class="insp-drag drag"></div>
+      <div class="insp-body" id="insp-body"></div>
+    </aside>
+
+    <!-- "Just filed" card -->
+    <div class="toast" id="toast" hidden>
+      <img class="toast-thumb" id="toast-thumb" alt="">
+      <div class="toast-text"><b id="toast-title"></b><span id="toast-sub"></span></div>
+      <button class="link" id="toast-undo">Undo</button>
+    </div>
+  </div>
+
+  <!-- Sheets (settings and first run) -->
+  <div class="scrim" id="scrim" hidden>
+    <div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

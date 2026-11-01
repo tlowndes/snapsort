@@ -1,0 +1,53 @@
+{
+  "name": "snapsort",
+  "productName": "Snapsort",
+  "version": "0.1.0",
+  "description": "Names and files your screenshots by what's in them, with a review list and undo",
+  "main": "main.js",
+  "author": "Tom Lowndes",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/*.test.js",
+    "dist": "electron-builder --win"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0",
+    "chokidar": "^4.0.3",
+    "electron-updater": "^6.8.11"
+  },
+  "devDependencies": {
+    "electron": "^44.7.2",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "uk.co.tomlowndes.snapsort",
+    "productName": "Snapsort",
+    "files": [
+      "main.js",
+      "preload.js",
+      "lib/**",
+      "src/**",
+      "assets/**"
+    ],
+    "asarUnpack": [
+      "lib/ocr.ps1"
+    ],
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "tlowndes",
+        "repo": "snapsort",
+        "releaseType": "release"
+      }
+    ]
+  }
+}
